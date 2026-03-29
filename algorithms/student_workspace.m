@@ -7,6 +7,26 @@ if (read_only_vars.counter == 1)
     public_vars = init_particle_filter(read_only_vars, public_vars);
     public_vars = init_kalman_filter(read_only_vars, public_vars);
 
+    % Clear any leftover data file from previous run
+    if isfile('algorithms/sensor_data.mat')
+        delete('algorithms/sensor_data.mat');
+    end
+    
+    public_vars.lidar_log = [];
+    public_vars.gnss_log  = [];
+
+end
+
+% Task 2: Log sensor data every tick
+public_vars.lidar_log = [public_vars.lidar_log; read_only_vars.lidar_distances];
+public_vars.gnss_log  = [public_vars.gnss_log;  read_only_vars.gnss_position];
+ 
+% Task 2: Save data to file every 100 ticks
+if mod(read_only_vars.counter, 100) == 0
+    lidar_log = public_vars.lidar_log;
+    gnss_log  = public_vars.gnss_log;
+    save('algorithms/sensor_data.mat', 'lidar_log', 'gnss_log');
+    fprintf('Saved %d samples to sensor_data.mat\n', read_only_vars.counter);
 end
 
 % 9. Update particle filter
