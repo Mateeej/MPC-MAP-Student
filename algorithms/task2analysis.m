@@ -78,10 +78,10 @@ fprintf('--- GNSS Covariance Matrix (2x2) ---\n');
 disp(C_gnss);
 
 % Verify diagonal equals sigma^2
-fprintf('Verify LiDAR diagonal == sigma^2 (should be ~0):\n');
+fprintf('Verify LiDAR diagonal == sigma^2:\n');
 disp(max(abs(diag(C_lidar)' - sigma_lidar.^2)));
 
-fprintf('Verify GNSS diagonal == sigma^2 (should be ~0):\n');
+fprintf('Verify GNSS diagonal == sigma^2:\n');
 disp(max(abs(diag(C_gnss)' - sigma_gnss.^2)));
 
 %% --- TASK 4 ---
