@@ -3,10 +3,58 @@ function [public_vars] = student_workspace(read_only_vars,public_vars)
 
 % 8. Perform initialization procedure
 if (read_only_vars.counter == 1)
-          
+ 
     public_vars = init_particle_filter(read_only_vars, public_vars);
     public_vars = init_kalman_filter(read_only_vars, public_vars);
+ 
+    % ---- Define test paths (Task 2) ----
+ 
+    % Path 1: Straight line
+    path_1 = [1,  1;
+              1, 16;
+              13,14;
+              16, 16];
+ 
+    % Path 2: Arc
+        % Straight
+        seg1 = [1,  1;
+            1, 14];
+        % Right
+        arc1 = make_arc([4, 14], 3, 180, 45, 'cw', 10);
+        % Straight
+        seg2 = [6,  16.2;
+            10, 14];
+        % Left
+        arc2 = make_arc([12, 18.3], 4.8, 250, 330, 'ccw', 10);
 
+    path_2 = [seg1; arc1; seg2; arc2];
+ 
+    % Path 3: Sinewave
+        % Straight
+        seg1 = [1,  1;
+            1, 2];
+        seg2 = make_sine([1,2], [10,2], 1, 2);
+        seg3 = make_sine([10,2], [10,13], 1.3, 8, true, 64);
+        seg4 = make_sine([10,13], [16,16], 0.5, 32, true,128);
+
+    path_3 = [seg1; seg2; seg3; seg4];
+ 
+ 
+    % Select active path (set path_select in setup.m)
+    switch public_vars.path_select
+        case 1
+            public_vars.path = path_1;
+        case 2
+            public_vars.path = path_2;
+        case 3
+            public_vars.path = path_3;
+        otherwise
+            public_vars.path = path_1;
+    end
+ 
+    % Index of current target waypoint
+    public_vars.target_idx = 1;
+ 
 end
 
 % 9. Update particle filter
@@ -19,7 +67,7 @@ public_vars.particles = update_particle_filter(read_only_vars, public_vars);
 public_vars.estimated_pose = estimate_pose(public_vars); % (x,y,theta)
 
 % 12. Path planning
-public_vars.path = plan_path(read_only_vars, public_vars);
+%public_vars.path = plan_path(read_only_vars, public_vars);
 
 % 13. Plan next motion command
 public_vars = plan_motion(read_only_vars, public_vars);
