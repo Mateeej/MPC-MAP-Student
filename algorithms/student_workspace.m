@@ -6,6 +6,7 @@ if (read_only_vars.counter == 1)
           
     public_vars = init_particle_filter(read_only_vars, public_vars);
     public_vars = init_kalman_filter(read_only_vars, public_vars);
+    public_vars.pf_enabled = 1;
 
 end
 
