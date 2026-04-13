@@ -6,6 +6,7 @@ new_particles = zeros(N, size(particles, 2));
 
 % Cumulative sum of weights
 cumulative = cumsum(weights);
+cumulative(end) = 1.0;
 
 % Random starting point
 r = rand / N;

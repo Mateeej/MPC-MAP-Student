@@ -54,8 +54,6 @@ if (read_only_vars.counter == 1)
         otherwise
             public_vars.path = path_1;
     end
-
-    public_vars.path = astar(read_only_vars, public_vars)
  
     % Index of current target waypoint
     public_vars.target_idx = 1;

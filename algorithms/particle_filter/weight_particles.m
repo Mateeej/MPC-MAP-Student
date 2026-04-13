@@ -1,7 +1,7 @@
 function [weights] = weight_particles(particle_measurements, lidar_distances)
 %WEIGHT_PARTICLES Computes particle weights based on lidar similarity
 
-SIGMA = 0.3;  % expected lidar noise — tune this!
+SIGMA = 5;  % expected lidar noise
 N = size(particle_measurements, 1);
 weights = ones(N, 1);
 
