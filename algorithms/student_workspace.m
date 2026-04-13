@@ -1,11 +1,14 @@
 function [public_vars] = student_workspace(read_only_vars,public_vars)
 %STUDENT_WORKSPACE Summary of this function goes here
 
+public_vars.counter = read_only_vars.counter;
+
 % 8. Perform initialization procedure
 if (read_only_vars.counter == 1)
  
     public_vars = init_particle_filter(read_only_vars, public_vars);
     public_vars = init_kalman_filter(read_only_vars, public_vars);
+    public_vars.pf_enabled = 1;
  
     % ---- Define test paths (Task 2) ----
  
@@ -51,6 +54,8 @@ if (read_only_vars.counter == 1)
         otherwise
             public_vars.path = path_1;
     end
+
+    public_vars.path = astar(read_only_vars, public_vars)
  
     % Index of current target waypoint
     public_vars.target_idx = 1;
