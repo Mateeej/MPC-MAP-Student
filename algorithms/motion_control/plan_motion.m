@@ -1,18 +1,3 @@
-% function [public_vars] = plan_motion(read_only_vars, public_vars)
-% %PLAN_MOTION Summary of this function goes here
-% 
-% % I. Pick navigation target
-% 
-% target = get_target(public_vars.estimated_pose, public_vars.path);
-% 
-% 
-% % II. Compute motion vector
-% 
-% public_vars.motion_vector = [0.5, 0.5];
-% 
-% 
-% end
-
 function [public_vars] = plan_motion(read_only_vars, public_vars)
 %PLAN_MOTION Pure Pursuit path following using MoCap pose.
  
@@ -22,7 +7,8 @@ V_base     = 1.0;   % base forward speed (max 1.0)
 INTERWHEEL = read_only_vars.agent_drive.interwheel_dist; % 0.2 m
  
 % ---- Get current pose from MoCap ----
-pose = read_only_vars.mocap_pose; % [x, y, theta]
+%pose = read_only_vars.mocap_pose; % [x, y, theta]
+pose = public_vars.estimated_pose;
  
 if isempty(pose) || isempty(public_vars.path)
     public_vars.motion_vector = [0, 0];
@@ -57,5 +43,6 @@ vR = max(-max_vel, min(max_vel, vR));
 vL = max(-max_vel, min(max_vel, vL));
  
 public_vars.motion_vector = [vR, vL];
+%public_vars.motion_vector = [0, 0];
  
 end
