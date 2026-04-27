@@ -12,12 +12,12 @@ if (read_only_vars.counter == 1)
     % GNSS log init
     public_vars.gnss_log = [];
 
-    % Path 4: Arc
-    seg1 = [2, 2; 2, 2];
-    arc1 = make_arc([9, 2], 7, 180, 360, 'cw', 32);
-    path_4 = [seg1; arc1];
-
-    public_vars.path = path_4;
+    % % Path 4: Arc
+    % seg1 = [2, 2; 2, 2];
+    % arc1 = make_arc([9, 2], 7, 180, 360, 'cw', 32);
+    % path_4 = [seg1; arc1];
+    % 
+    % public_vars.path = path_4;
     public_vars.target_idx = 1;
 
 end
@@ -42,7 +42,20 @@ end
 % 11. Estimate current robot position
 public_vars.estimated_pose = estimate_pose(public_vars);
 
-% 12. Plan next motion command
+% 12. Path planning - A*
+%public_vars.path = plan_path(read_only_vars, public_vars);
+pose_xy = public_vars.estimated_pose(1:2);
+if read_only_vars.counter == 1 || isempty(public_vars.path)
+    public_vars.path = plan_path(read_only_vars, public_vars);
+else
+    diffs = public_vars.path - repmat(pose_xy, size(public_vars.path, 1), 1);
+    dist_to_path = min(sqrt(sum(diffs.^2, 2)));
+    if dist_to_path > 1.0
+        public_vars.path = plan_path(read_only_vars, public_vars);
+    end
+end
+
+% 13. Plan next motion command
 public_vars = plan_motion(read_only_vars, public_vars);
 
 end
